@@ -15,8 +15,8 @@ describe('isOptOutMessage', () => {
     expect(isOptOutMessage(k)).toBe(true),
   );
 
-  it.each(['ஆபండి', 'వద్దు'])('detects Telugu opt-out: %s', (k) =>
-    expect(isOptOutMessage(k)).toBe(typeof true),
+  it.each(['ఆపండి', 'వద్దు'])('detects Telugu opt-out: %s', (k) =>
+    expect(isOptOutMessage(k)).toBe(true),
   );
 
   it.each(['hello', 'thanks', 'interested', 'tell me more', ''])(

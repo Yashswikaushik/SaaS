@@ -54,8 +54,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN" suppressHydrationWarning className={`${sans.variable} ${display.variable} ${mono.variable}`}>
       <body className="min-h-dvh bg-background font-sans text-foreground">
-        <Providers>{children}</Providers>
-        <Toaster />
+        <Providers>
+          <Toaster>{children}</Toaster>
+        </Providers>
         <CookieBanner />
       </body>
     </html>

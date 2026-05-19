@@ -82,9 +82,13 @@ describe('GSTIN validation', () => {
     expect(stateCodeFromGstin('99AAAPL1234C1Z5')).toBeNull();
   });
 
-  it('runs GSTIN checksum on format-valid candidates', () => {
-    // checksum-correct GSTIN here will pass; we just confirm the helper runs.
-    const candidate = '29AAAPL1234C1Z5';
-    expect(isValidGstinChecksum(candidate)).toBe(typeof true);
+  it('rejects a GSTIN with broken checksum', () => {
+    // Format-valid but checksum will fail.
+    expect(isValidGstinChecksum('29AAAPL1234C1Z5')).toBe(false);
+  });
+
+  it('rejects malformed GSTINs in checksum check', () => {
+    expect(isValidGstinChecksum('not a gstin')).toBe(false);
+    expect(isValidGstinChecksum('')).toBe(false);
   });
 });

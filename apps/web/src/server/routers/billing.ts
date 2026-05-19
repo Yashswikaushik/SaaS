@@ -2,14 +2,13 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { and, desc, eq } from 'drizzle-orm';
 import { audit, db, invoices, orgs, subscriptions } from '@bharat/db';
+import { PLAN_PRICING, type PlanPricing } from '@bharat/razorpay/plans';
 import {
-  PLAN_PRICING,
   cancelSubscription,
   createSubscription,
   pauseSubscription,
   resumeSubscription,
-  type PlanPricing,
-} from '@bharat/razorpay';
+} from '@bharat/razorpay/subscriptions';
 import { orgProcedure, router } from '../trpc';
 
 const TierEnum = z.enum(['starter', 'growth', 'scale', 'agency']);

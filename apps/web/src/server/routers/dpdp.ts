@@ -1,8 +1,9 @@
 import { TRPCError } from '@trpc/server';
 import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { audit, db, dsrRequests } from '@bharat/db';
-import { CONSENT_SCOPES, CURRENT_NOTICE_VERSION, eraseDataPrincipal, getLatestConsent, recordConsent } from '@bharat/dpdp';
+import { audit, db, dsrRequests, eraseDataPrincipal } from '@bharat/db';
+import { CONSENT_SCOPES, CURRENT_NOTICE_VERSION } from '@bharat/dpdp/scopes';
+import { getLatestConsent, recordConsent } from '@bharat/dpdp/consent-manager';
 import { authedProcedure, router } from '../trpc';
 
 export const dpdpRouter = router({

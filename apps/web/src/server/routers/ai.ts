@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { and, eq } from 'drizzle-orm';
 import { audit, db, leads } from '@bharat/db';
-import { assertConsent } from '@bharat/dpdp';
+import { assertConsent } from '@bharat/dpdp/consent-manager';
 import { generateColdEmail, summarizeReviews } from '@bharat/ai';
 import { orgProcedure, router } from '../trpc';
 

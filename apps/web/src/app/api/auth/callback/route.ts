@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { audit, db, users } from '@bharat/db';
 import { supabaseServer } from '@/lib/supabase-server';
-import { recordConsent } from '@bharat/dpdp';
+import { recordConsent } from '@bharat/dpdp/consent-manager';
 
 export const runtime = 'nodejs';
 

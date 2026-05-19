@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { trpc } from '@/lib/trpc/client';
 import { Button } from '@/components/ui/button';
-import { CONSENT_DESCRIPTORS } from '@bharat/dpdp';
+import { CONSENT_DESCRIPTORS } from '@bharat/dpdp/scopes';
 import { useToast } from '@/components/ui/toaster';
 import { formatDate } from '@/lib/intl';
 
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           {CONSENT_DESCRIPTORS.map((d) => {
-            const state = consents.data?.scopes[d.scope];
+            const state = consents.data?.scopes?.[d.scope];
             const granted = state?.granted ?? d.required;
             return (
               <div key={d.scope} className="flex items-start justify-between gap-4 rounded-lg border p-4">

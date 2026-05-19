@@ -8,7 +8,8 @@ import {
   verifyAiSensyBearer,
 } from '@bharat/aisensy';
 import { audit, consents, db, leadMessages, users } from '@bharat/db';
-import { isOptOutMessage, recordConsent } from '@bharat/dpdp';
+import { isOptOutMessage } from '@bharat/dpdp/optout-keywords';
+import { recordConsent } from '@bharat/dpdp/consent-manager';
 import { env } from '@/env';
 import { log } from '@/lib/logger';
 

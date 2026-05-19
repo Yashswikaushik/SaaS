@@ -10,7 +10,7 @@ import {
   waTemplates,
 } from '@bharat/db';
 import { estimateBroadcastCostPaise, sendTemplate } from '@bharat/aisensy';
-import { assertConsent } from '@bharat/dpdp';
+import { assertConsent } from '@bharat/dpdp/consent-manager';
 import { generateWaCold } from '@bharat/ai';
 import { toE164 } from '@/lib/intl';
 import { orgProcedure, router } from '../trpc';

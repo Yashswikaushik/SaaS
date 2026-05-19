@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@bharat/db": ["./packages/db/src"],
+      "@bharat/db/*": ["./packages/db/src/*"],
+      "@bharat/ai": ["./packages/ai/src"],
+      "@bharat/ai/*": ["./packages/ai/src/*"],
+      "@bharat/razorpay": ["./packages/razorpay/src"],
+      "@bharat/razorpay/*": ["./packages/razorpay/src/*"],
+      "@bharat/aisensy": ["./packages/aisensy/src"],
+      "@bharat/aisensy/*": ["./packages/aisensy/src/*"],
+      "@bharat/msg91": ["./packages/msg91/src"],
+      "@bharat/msg91/*": ["./packages/msg91/src/*"],
+      "@bharat/gst": ["./packages/gst/src"],
+      "@bharat/gst/*": ["./packages/gst/src/*"],
+      "@bharat/dpdp": ["./packages/dpdp/src"],
+      "@bharat/dpdp/*": ["./packages/dpdp/src/*"],
+      "@bharat/scraper": ["./packages/scraper/src"],
+      "@bharat/scraper/*": ["./packages/scraper/src/*"]
+    }
+  }
+}

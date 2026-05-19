@@ -1,0 +1,21 @@
+{
+  "name": "@bharat/scraper",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo 'no lint here'"
+  },
+  "dependencies": {
+    "@bharat/db": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
+  }
+}

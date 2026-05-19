@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  osrm:
+    image: osrm/osrm-backend:latest
+    restart: unless-stopped
+    command: osrm-routed --algorithm mld --max-table-size 50000 /data/india-latest.osrm
+    ports:
+      - '5000:5000'
+    volumes:
+      - osrm-india:/data
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://localhost:5000/route/v1/driving/77.5946,12.9716;77.6,12.97 | grep -q "Ok"']
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  # One-shot to prepare the India OSRM extract.
+  # Run with `docker compose run osrm-prep`.
+  osrm-prep:
+    image: osrm/osrm-backend:latest
+    profiles: ['prep']
+    entrypoint: ['/bin/sh', '-c']
+    command: |
+      "wget -O /data/india-latest.osm.pbf https://download.geofabrik.de/asia/india-latest.osm.pbf &&
+       osrm-extract -p /opt/car.lua /data/india-latest.osm.pbf &&
+       osrm-partition /data/india-latest.osrm &&
+       osrm-customize /data/india-latest.osrm"
+    volumes:
+      - osrm-india:/data
+
+volumes:
+  osrm-india:

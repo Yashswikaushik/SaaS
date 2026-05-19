@@ -1,0 +1,30 @@
+# syntax=docker/dockerfile:1.7
+
+FROM node:20-alpine AS deps
+WORKDIR /repo
+RUN corepack enable
+COPY pnpm-workspace.yaml package.json ./
+COPY workers/package.json workers/
+COPY packages/aisensy/package.json packages/aisensy/
+COPY packages/db/package.json packages/db/
+COPY packages/gst/package.json packages/gst/
+COPY packages/razorpay/package.json packages/razorpay/
+COPY packages/dpdp/package.json packages/dpdp/
+RUN --mount=type=cache,target=/root/.local/share/pnpm pnpm install --frozen-lockfile=false
+
+FROM node:20-alpine AS build
+WORKDIR /repo
+RUN corepack enable
+COPY --from=deps /repo/node_modules ./node_modules
+COPY . .
+
+FROM node:20-alpine AS runtime
+WORKDIR /repo
+ENV NODE_ENV=production
+RUN addgroup -S app && adduser -S app -G app
+RUN corepack enable
+COPY --from=build /repo /repo
+USER app
+HEALTHCHECK --interval=30s --timeout=5s --retries=5 \
+  CMD pgrep -f "workers/src/index.ts" || exit 1
+CMD ["pnpm", "--filter", "@bharat/workers", "start"]

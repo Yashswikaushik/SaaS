@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  push:
+    branches: [main, 'claude/**']
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile=false
+      - run: pnpm typecheck
+      - run: pnpm lint
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ['54322:5432']
+        options: --health-cmd="pg_isready" --health-interval=5s --health-timeout=5s --health-retries=10
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: --health-cmd="redis-cli ping" --health-interval=5s --health-timeout=3s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile=false
+      - name: Apply DB migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:54322/postgres
+        run: |
+          psql "$DATABASE_URL" -f packages/db/migrations/0001_init.sql
+      - run: pnpm test
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:54322/postgres
+          REDIS_URL: redis://localhost:6379
+          IP_HASH_SALT: test-salt-32-chars-minimum-12345678
+          OTP_HMAC_SECRET: test-otp-secret-32-chars-minimum-12345

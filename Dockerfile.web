@@ -1,0 +1,36 @@
+# syntax=docker/dockerfile:1.7
+
+# Multi-stage build for the Next.js web app with monorepo packages.
+FROM node:20-alpine AS deps
+WORKDIR /repo
+RUN corepack enable
+COPY pnpm-workspace.yaml package.json ./
+COPY apps/web/package.json apps/web/
+COPY packages/ai/package.json packages/ai/
+COPY packages/aisensy/package.json packages/aisensy/
+COPY packages/db/package.json packages/db/
+COPY packages/dpdp/package.json packages/dpdp/
+COPY packages/gst/package.json packages/gst/
+COPY packages/msg91/package.json packages/msg91/
+COPY packages/razorpay/package.json packages/razorpay/
+COPY packages/scraper/package.json packages/scraper/
+RUN --mount=type=cache,target=/root/.local/share/pnpm pnpm install --frozen-lockfile=false
+
+FROM node:20-alpine AS build
+WORKDIR /repo
+RUN corepack enable
+COPY --from=deps /repo/node_modules ./node_modules
+COPY . .
+RUN pnpm --filter @bharat/web build
+
+FROM node:20-alpine AS runtime
+WORKDIR /repo
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
+RUN addgroup -S app && adduser -S app -G app
+RUN corepack enable
+COPY --from=build /repo /repo
+USER app
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=5 \
+  CMD wget -qO- http://localhost:3000/api/health || exit 1
+CMD ["pnpm", "--filter", "@bharat/web", "start"]
